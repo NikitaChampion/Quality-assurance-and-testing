@@ -5,6 +5,7 @@ public class CorrectAccount implements Account {
 
     private boolean blocked = BLOCKED_CONST;
     private int balance = BALANCE_CONST;
+    // Отрицательный неснимаемый остаток на счету
     private int maxCredit = MAX_CREDIT_CONST;
 
     public int getBalance() {
@@ -24,7 +25,7 @@ public class CorrectAccount implements Account {
     }
 
     public boolean unblock() {
-        if (balance < maxCredit) {
+        if (balance < -maxCredit) {
             return false;
         }
 
@@ -46,7 +47,7 @@ public class CorrectAccount implements Account {
     }
 
     public boolean deposit(int sum) {
-        if (blocked) {
+        if (isBlocked()) {
             return false;
         } else if (sum < 0 || sum > MAX_BOUND) {
             return false;
@@ -61,12 +62,11 @@ public class CorrectAccount implements Account {
             return false;
         } else if (sum < 0 || sum > MAX_BOUND) {
             return false;
-        } else if (balance <= maxCredit + sum) {
+        } else if (balance - sum < -maxCredit) {
             return false;
         } else {
             balance -= sum;
             return true;
         }
     }
-
 }
